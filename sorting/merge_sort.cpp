@@ -34,17 +34,33 @@ void merge(int *arr, int l, int m, int r) {
     int i, j, k;
     int n1 = m - l + 1;
     int n2 = r - m;
+    
+    // n1 is the size of first array, n2 is the size of second array.
 
     int *L = new int[n1], *R = new int[n2];
+    
+    // Created two arrays namely 'L' and 'R' of sizes n1 and n2 respectively.
 
     for (i = 0; i < n1; i++) L[i] = arr[l + i];
     for (j = 0; j < n2; j++) R[j] = arr[m + 1 + j];
+    
+    /** 
+       * Populated the arrays 'L' and 'R' from the array 'arr', because now we are going to do changes in 'arr'.
+       * The merged result will be stored in 'arr' itself. 
+    **/
 
     i = 0;
     j = 0;
     k = l;
-    while (i < n1 || j < n2) {
-        if (j >= n2 || (i < n1 && L[i] <= R[j])) {
+    
+    /** 
+       * Here i is used for traversing 'L', j is for 'R' and k is for traversing 'arr'.
+       * k is initialised with l (i.e. k=l) because we are only considering array 'arr' from l to r.
+       * We are assuming that arr[l..m] and arr[m+1..r] are sorted, hence the arrays 'L' and 'R' are sorted respectively.
+    **/
+    
+    while (i < n1 and j < n2) {
+        if (L[i] <= R[j]) {
             arr[k] = L[i];
             i++;
         } else {
@@ -52,6 +68,23 @@ void merge(int *arr, int l, int m, int r) {
             j++;
         }
         k++;
+    }
+    
+    /** 
+      * Now there will be one array which is not traversed completely, but we know for sure that remaining elements in that array are sorted 
+        and all are greater than previosly traversed elements. Thus we can simply assign them to arr[].
+    **/
+    
+    while(i<n1){
+        arr[k] = L[i];
+        k++;
+        i++;
+    }
+    
+    while(j<n2){
+        arr[k]=R[j];
+        k++;
+        j++;
     }
 
     delete[] L;
